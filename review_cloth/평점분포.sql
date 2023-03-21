@@ -37,6 +37,7 @@ where `Department Name` = 'Trend'
 and Rating <=3;
 
 -- *연령대 구분 (floor 함수 사용) *****
+--**** floor : 소수점 첫째 자리에서 버림하는 함수
 select floor(age/10)*10 ageband,
 Age
 from clothes.dataset2 
