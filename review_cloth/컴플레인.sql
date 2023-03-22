@@ -11,7 +11,7 @@ group by 1,2;
 select *
 from 
 (select *,
-row_number() over(partition by `Department Name`
+row_number() over(partition by `Department Name` -- row number로 rank생성
 order by avg_rate) rnk
 from  (
 select `Department Name`, `Clothing ID`,
@@ -44,4 +44,28 @@ floor(age/10)*10 ageband,
 avg(Rating) avg_rating
 from clothes.dataset2 
 group by 1,2;
--- 5. Size Complain
+
+-- 낮은 연령대 순으로 정렬, 낮은 rating 순으로 정렬,순위 매기기
+-- (row number over partition by ~ )
+select *,
+row_number() over(partition by ageband order by avg_rating) rnk
+from
+(select `Department Name`,
+floor(age/10)*10 ageband,
+avg(Rating) avg_rating
+from clothes.dataset2 
+group by 1,2) a;
+
+-- 연령별로 가장 낮은 평점 준 데이터 조회
+select *
+from 
+(select *,
+row_number() over(partition by ageband order by avg_rating) rnk
+from
+(select `Department Name`,
+floor(age/10)*10 ageband,
+avg(Rating) avg_rating
+from clothes.dataset2 
+group by 1,2) a) a
+where rnk = 1;
+
